@@ -12,7 +12,7 @@ export default class Container extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container _block">
                 <p>this is a container</p>
             </div>
         )
