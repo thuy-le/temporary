@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
-console.log('Homepage loaded');
+import { connect } from 'react-redux';
+
+function mapStateToProps(state, ownProps) {
+    return {
+
+    }
+}
+
+function dispatchToPropsBinding(dispatch, ownProps) {
+    return {
+        init: () => dispatch({type: 'START_CONTAINER'})
+    }
+}
+
 require('./style.less');
+@connect(mapStateToProps, dispatchToPropsBinding)
 export default class Container extends Component {
     static PropTypes = {};
     static DefaultTypes = {};
 
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {};
         this.toLogout = this.toLogout.bind(this);
     }
 
     toLogout() {
-        browserHistory.push('/logout');
+
+    }
+
+    componentDidMount() {
+        this.props.init();
     }
 
     render() {

@@ -1,25 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
-// Usage:
-// 
-// function loader() {
-//   return new Promise((resolve) => {
-//     if (process.env.LAZY_LOAD) {
-//       require.ensure([], (require) => {
-//         resolve(require('./SomeComponent').default);
-//       });
-//     }
-//   });
-// }
-// ...
-// <AsyncComponent loader={loader} />
-//
-// In the future, loader() could be:
-// const loader = () => import('./SomeComponent');
 export default class AsyncComponent extends Component {
+
     static propTypes = {
         loader: PropTypes.func.isRequired
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -27,9 +12,12 @@ export default class AsyncComponent extends Component {
             Component: null,
         };
     }
-    
+
     componentDidMount() {
         this.props.loader().then((Component) => {
+            if (Component.default) {
+                Component = Component.default
+            }
             this.setState({ Component });
         });
     }
@@ -40,6 +28,6 @@ export default class AsyncComponent extends Component {
             return <Component {...this.props} />;
         }
 
-        return null; // loading wheel
+        return <div/>; // loading wheel
     }
 }

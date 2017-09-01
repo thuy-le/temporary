@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-console.log('Logout loaded!');
+
 require('./style.less');
 export default class Logout extends Component {
     static PropTypes = {};
