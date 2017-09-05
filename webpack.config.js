@@ -137,7 +137,8 @@ module.exports = {
         ]
     },
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        compress: true,
     },
     plugins: prodPlugins([
         new webpack.DefinePlugin({
