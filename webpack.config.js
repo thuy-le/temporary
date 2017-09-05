@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const env = process.env.NODE_ENV || 'development';
 const publicPath = process.env.PUBLIC_PATH || "/";
 const isDev = env !== 'production';
@@ -18,17 +20,28 @@ function getEntries(entries) {
 
 function prodPlugins(commonPlugins) {
     return isDev ? commonPlugins : commonPlugins.concat([
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+            mangle: true,
+            comments: false,
+            beautify: false,
+            compress: {
+                warnings: false
+            }
+        }),
         new webpack.optimize.AggressiveMergingPlugin(),
         new webpack.NoErrorsPlugin()
     ])
 }
 
 module.exports = {
+    stats: {
+        colors: true,
+        reasons: true
+    },
     entry: isDev ? getEntries([indexPath]) : indexPath,
     output: {
         path: distPath,
-        filename: 'qtp.[hash].js',
+        filename: '[name].[hash].js',
         publicPath: publicPath
     },
     resolve: {
@@ -58,9 +71,21 @@ module.exports = {
             test: /\.(less|css)$/,
             use: ExtractTextPlugin.extract({
                 fallback: 'style-loader',
-                loader: [
-                    'css-loader',
-                    'less-loader'
+                use: [
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
+                        loader: 'less-loader'
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: () => [ require('autoprefixer')({
+                                browsers: [ 'last 4 version' ]
+                            }) ]
+                        }
+                    }
                 ]
             })
         }, {
@@ -124,6 +149,9 @@ module.exports = {
             template: './src/index.ejs',
             filename: './index.html'
         }),
-        new ExtractTextPlugin('qtp.[contenthash].css')
+        new ExtractTextPlugin('[name].[hash].css'),
+        new ProgressBarPlugin()
+        // ,
+        // new BundleAnalyzerPlugin()
     ])
 };

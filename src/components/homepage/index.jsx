@@ -15,7 +15,7 @@ function dispatchToPropsBinding(dispatch, ownProps) {
 
 require('./style.less');
 @connect(mapStateToProps, dispatchToPropsBinding)
-export default class Container extends Component {
+export default class Homepage extends Component {
     static PropTypes = {};
     static DefaultTypes = {};
 
@@ -35,9 +35,8 @@ export default class Container extends Component {
 
     render() {
         return (
-            <div className="container _block">
-                <div>this is a container</div>
-                <div onClick={this.toLogout}>To logout</div>
+            <div className="homepage _block">
+
             </div>
         )
     }

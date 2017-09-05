@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 
 require('./style.less');
 export default class NotFound extends Component {
